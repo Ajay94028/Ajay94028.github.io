@@ -2,31 +2,133 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Welcome to My Virtual World</title>
+  <title>🚀 Welcome to My Virtual World 🚀</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
-    body {
-      background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: black;
+      font-family: 'Orbitron', sans-serif;
       color: white;
-      font-family: 'Arial', sans-serif;
       text-align: center;
-      margin-top: 20vh;
-      animation: glow 2s infinite alternate;
     }
+
+    /* Background stars */
+    body::before {
+      content: "";
+      position: absolute;
+      width: 300%;
+      height: 300%;
+      background: transparent url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/star-bg.jpg') repeat;
+      background-size: cover;
+      animation: moveBackground 200s linear infinite;
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    @keyframes moveBackground {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-500px, -500px); }
+    }
+
+    h1 {
+      margin-top: 15vh;
+      font-size: 3em;
+      text-shadow: 0 0 10px #00ffe0, 0 0 20px #00ffe0;
+    }
+
+    #typing-text {
+      font-size: 1.5em;
+      margin-top: 20px;
+      height: 40px;
+    }
+
     @keyframes glow {
       from { text-shadow: 0 0 10px #00ffe0; }
       to { text-shadow: 0 0 20px #00ffe0, 0 0 30px #00ffe0; }
     }
-    h1 {
-      font-size: 3em;
+
+    .planet {
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle at 30% 30%, #00ffe0, #000);
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(0deg);
+      animation: spin 60s linear infinite;
+      box-shadow: 0 0 30px #00ffe0, 0 0 60px #00ffe0;
+      z-index: 0;
     }
-    p {
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .enter-button {
+      margin-top: 40px;
+      padding: 15px 30px;
+      border: 2px solid #00ffe0;
+      border-radius: 10px;
       font-size: 1.2em;
-      margin-top: 20px;
+      color: #00ffe0;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s;
+      animation: glow 2s infinite alternate;
+      position: relative;
+      z-index: 1;
+    }
+
+    .enter-button:hover {
+      background: #00ffe0;
+      color: black;
+      box-shadow: 0 0 20px #00ffe0, 0 0 40px #00ffe0;
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
 <body>
+  <div class="planet"></div>
   <h1>🌌 Welcome to My Virtual World 🌌</h1>
-  <p>Explore the magic beyond reality.</p>
+  <div id="typing-text"></div>
+
+  <button class="enter-button" onclick="warp()">Enter My World</button>
+
+  <audio autoplay loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_93b107d723.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    // Typing animation
+    const text = "Step into a dimension beyond imagination...";
+    let index = 0;
+    function typeWriter() {
+      if (index < text.length) {
+        document.getElementById("typing-text").innerHTML += text.charAt(index);
+        index++;
+        setTimeout(typeWriter, 100);
+      }
+    }
+    typeWriter();
+
+    // Warp animation
+    function warp() {
+      document.body.style.transition = "all 0.8s ease";
+      document.body.style.transform = "scale(2) rotate(720deg)";
+      setTimeout(() => {
+        alert("🌌 Get ready for an unforgettable journey! 🚀");
+      }, 800);
+    }
+  </script>
 </body>
 </html>
