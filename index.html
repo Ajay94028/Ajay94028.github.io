@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🚀 Welcome to My Virtual World 🚀</title>
+  <title>🌌 Star Map | Virtual World 🌌</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
     body, html {
@@ -16,119 +16,113 @@
       text-align: center;
     }
 
-    /* Background stars */
-    body::before {
-      content: "";
+    canvas {
       position: absolute;
-      width: 300%;
-      height: 300%;
-      background: transparent url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/star-bg.jpg') repeat;
-      background-size: cover;
-      animation: moveBackground 200s linear infinite;
-      z-index: -1;
-      opacity: 0.3;
-    }
-
-    @keyframes moveBackground {
-      0% { transform: translate(0, 0); }
-      100% { transform: translate(-500px, -500px); }
-    }
-
-    h1 {
-      margin-top: 15vh;
-      font-size: 3em;
-      text-shadow: 0 0 10px #00ffe0, 0 0 20px #00ffe0;
-    }
-
-    #typing-text {
-      font-size: 1.5em;
-      margin-top: 20px;
-      height: 40px;
-    }
-
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #00ffe0; }
-      to { text-shadow: 0 0 20px #00ffe0, 0 0 30px #00ffe0; }
-    }
-
-    .planet {
-      width: 150px;
-      height: 150px;
-      background: radial-gradient(circle at 30% 30%, #00ffe0, #000);
-      border-radius: 50%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(0deg);
-      animation: spin 60s linear infinite;
-      box-shadow: 0 0 30px #00ffe0, 0 0 60px #00ffe0;
+      top: 0;
+      left: 0;
       z-index: 0;
     }
 
-    @keyframes spin {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    .content {
+      position: relative;
+      z-index: 1;
+      padding-top: 100px;
     }
 
-    .enter-button {
+    h1 {
+      font-size: 3em;
+      text-shadow: 0 0 10px #00ffe0, 0 0 20px #00ffe0;
+      animation: glow 2s infinite alternate;
+    }
+
+    p {
+      font-size: 1.2em;
+      margin-top: 20px;
+      color: #cccccc;
+    }
+
+    a.back-button {
+      display: inline-block;
       margin-top: 40px;
       padding: 15px 30px;
       border: 2px solid #00ffe0;
       border-radius: 10px;
       font-size: 1.2em;
       color: #00ffe0;
+      text-decoration: none;
       background: transparent;
-      cursor: pointer;
       transition: all 0.3s;
       animation: glow 2s infinite alternate;
-      position: relative;
-      z-index: 1;
     }
 
-    .enter-button:hover {
+    a.back-button:hover {
       background: #00ffe0;
       color: black;
       box-shadow: 0 0 20px #00ffe0, 0 0 40px #00ffe0;
     }
 
-    audio {
-      display: none;
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #00ffe0; }
+      to { text-shadow: 0 0 20px #00ffe0, 0 0 30px #00ffe0; }
     }
   </style>
 </head>
 <body>
-  <div class="planet"></div>
-  <h1>🌌 Welcome to My Virtual World 🌌</h1>
-  <div id="typing-text"></div>
+  <canvas id="starCanvas"></canvas>
 
-  <button class="enter-button" onclick="warp()">Enter My World</button>
-
-  <audio autoplay loop>
-    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_93b107d723.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+  <div class="content">
+    <h1>🌟 Explore the Star Map 🌟</h1>
+    <p>Navigate through the infinite galaxy...<br>Each star hides a new story!</p>
+    <a href="index.html" class="back-button">🚀 Back to Home</a>
+  </div>
 
   <script>
-    // Typing animation
-    const text = "Step into a dimension beyond imagination...";
-    let index = 0;
-    function typeWriter() {
-      if (index < text.length) {
-        document.getElementById("typing-text").innerHTML += text.charAt(index);
-        index++;
-        setTimeout(typeWriter, 100);
-      }
-    }
-    typeWriter();
+    // Starfield animation
+    const canvas = document.getElementById('starCanvas');
+    const ctx = canvas.getContext('2d');
 
-    // Warp animation
-    function warp() {
-      document.body.style.transition = "all 0.8s ease";
-      document.body.style.transform = "scale(2) rotate(720deg)";
-      setTimeout(() => {
-        alert("🌌 Get ready for an unforgettable journey! 🚀");
-      }, 800);
+    let stars = [];
+    const STAR_COUNT = 300;
+    const SPEED = 0.5;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    for (let i = 0; i < STAR_COUNT; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2,
+        speed: Math.random() * SPEED + SPEED
+      });
+    }
+
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#00ffe0';
+      for (let star of stars) {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        star.y += star.speed;
+        if (star.y > canvas.height) {
+          star.y = 0;
+          star.x = Math.random() * canvas.width;
+        }
+      }
+
+      requestAnimationFrame(animateStars);
+    }
+
+    animateStars();
   </script>
 </body>
 </html>
+
